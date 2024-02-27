@@ -9,6 +9,7 @@
 using namespace std;
 #include "Jobs.h"
 #include <list>
+#include <fstream>
 
 
 class Employer {
@@ -24,6 +25,7 @@ public:
     string getId() const{return id;}
     string getPassword() const{return password;}
     string getEmail() const{return email;}
+    int getAge() const{return age;}
     void setName(string name){this->name = name;}
     void setLastName(string lastName){last_name = lastName;}
     void setId(string id){this->id = id;}
@@ -32,6 +34,12 @@ public:
     void printEmp();
     void enterNewJob();
     void printAllJobs();
+    void updateJob();
+    void deleteJob();
+    void writeToFile(fstream& file);
+    void readFromFile(fstream& file);
+
+    list<Jobs> jobList;
 
 
 private:
@@ -41,7 +49,6 @@ private:
     string password;
     string email;
     int age;
-    list<Jobs> jobList;
 
 };
 
