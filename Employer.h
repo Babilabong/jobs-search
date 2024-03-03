@@ -31,6 +31,7 @@ public:
     void setId(string id){this->id = id;}
     void setEmail(string email){this->email = email;}
     void setPassword(string password){this->password = password;}
+    void setAge(int age){ this->age=age;}
     void printEmp();
     void enterNewJob();
     void printAllJobs();

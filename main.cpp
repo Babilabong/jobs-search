@@ -1,3 +1,23 @@
+/*
+ * welcome to job search:
+ * before using this system you need to ensure that the file canData.txt and empData.txt are in directory cmake-build-debug
+ * the database is includes:
+ * 1 x candidate:name-Almog Babila, id-123123123, age-25, password-Aa123, email-Almog@gmail.com, story-story, resume-student,with 2 jobs request.
+ * 1 x employer:name-Alm Bab, id 123456789, age-30, password-P3hV7@iSP6, email-Alm@gmail.com, with 10 jobs.
+ * 10 x jobs:
+ * 1.area-north, job type-full, profession-basketball, experience-1,include saturday.
+ * 2.area-north, job type-half, profession-hi-tech, experience-2,include saturday.
+ * 3.area-north, job type-half, profession-maintenance, experience-3.
+ * 4.area-Central, job type-full, profession-hi-tech, experience-4,include saturday.
+ * 5.area-Central, job type-half, profession-civil servant, experience-5,include saturday.
+ * 6.area-Central, job type-full, profession-hi-tech, experience-6.
+ * 7.area-Central, job type-half, profession-teaching, experience-7.
+ * 8.area-South, job type-full, profession-hi-tech, experience-8.
+ * 9.area-South, job type-full, profession-maintenance, experience-9.
+ * 10.area-South, job type-half, profession-civil servant, experience-10,include saturday.
+ */
+
+
 #include <iostream>
 #include <string>
 #include "Employer.h"
@@ -38,6 +58,8 @@ void writeCanToFile(fstream& file,list<Candidate>& canList);
 void writeEmpToFile(fstream& file,list<Employer>& empList);
 void readCanFromFile(fstream& file,list<Candidate>& canList);
 void readEmpFromFile(fstream& file,list<Employer>& empList);
+void new_readEmpFromFile(fstream& file,list<Employer>& empList);
+void new_readCanFromFile(fstream& file,list<Candidate>& canList);
 
 
 
@@ -74,8 +96,8 @@ void signMenu(){
         return ;
     }
 
-    readCanFromFile(canFile,canList);
-    readEmpFromFile(empFile,empList);
+    new_readCanFromFile(canFile,canList);
+    new_readEmpFromFile(empFile,empList);
     empFile.close();
     canFile.close();
 
@@ -220,7 +242,7 @@ void signMenu(){
                                     idFlag=false;
                                     if(checkSameDetails(*emp)) {
                                         changePassword(*emp);
-                                        cout<<"great,you change your password"<<endl;
+//                                        cout<<"great,you change your password"<<endl;
                                     }
                                     else
                                         cout<<"the details are wrong"<<endl;
@@ -603,7 +625,7 @@ void filteringJobs(Candidate &user,list<Employer>& empList){
     char choice;
     int experience = 0,counter = 0;
     string area, jobType, profession;
-    bool saturday,flag = false;
+    bool saturday= true,flag = false;
 
     //choosing area
     cout << "please enter the job area:" << endl << "1 for north , 2 for Central , 3 for South , or any character for all: " << endl;
@@ -628,14 +650,14 @@ void filteringJobs(Candidate &user,list<Employer>& empList){
     cin>>choice;
     while ((getchar()) != '\n');
     if(choice == '1')
-            jobType = "full";
-        else{
-            if(choice == '2')
-                jobType = "half";
-            else {
-                jobType = "any";
-            }
+        jobType = "full";
+    else{
+        if(choice == '2')
+            jobType = "half";
+        else {
+            jobType = "any";
         }
+    }
 
     //choosing experience
     do {
@@ -698,7 +720,10 @@ void filteringJobs(Candidate &user,list<Employer>& empList){
 
     //available in sat?
     cout<<"please enter 0 if you want job which does not include saturday or any key if the job include saturday"<<endl;
-    cin>>saturday;
+    cin>>choice;
+    while ((getchar()) != '\n');
+    if(choice == '0')
+        saturday = false;
 
 
     for(auto it = empList.begin(); it != empList.end();++it){
@@ -740,6 +765,7 @@ void writeEmpToFile(fstream& file,list<Employer>& empList){
     }
 }
 
+
 void writeCanToFile(fstream& file,list<Candidate>& canList){
     for(auto can = canList.begin();can!=canList.end();++can){
         can->writeToFile(file);
@@ -766,6 +792,116 @@ void readEmpFromFile(fstream& file,list<Employer>& empList){
     }
 
 }
+
+
+void new_readEmpFromFile(fstream& file,list<Employer>& empList){
+    int size=0,jobSize=0,canInJobSize=0;
+    string str;
+    int integer;
+    bool boolian;
+
+    file>>size;
+    for(int i = 0;i<size;++i){
+        Employer newEmp;
+        file>>str;
+        newEmp.setName(str);
+        file>>str;
+        newEmp.setLastName(str);
+        file>>str;
+        newEmp.setId(str);
+        file>>str;
+        newEmp.setPassword(str);
+        file>>str;
+        newEmp.setEmail(str);
+        file>>integer;
+        newEmp.setAge(integer);
+        file>>jobSize;
+        for(int j = 0;j<jobSize;++j){
+            Jobs newJob;
+
+            file>>str;
+            newJob.setArea(str);
+            file>>str;
+            newJob.setJobType(str);
+            file>>boolian;
+            newJob.setSaturday(boolian);
+            getline(file,str);
+            getline(file,str);
+            newJob.setProfession(str);
+            file>>integer;
+            newJob.setExperience(integer);
+            file>>str;
+            newJob.setEmpId(str);
+            file>>canInJobSize;
+            for(int z=0;z<canInJobSize;++z){
+                file>>str;
+                newJob.canIdInJob.push_front(str);
+            }
+            newEmp.jobList.push_front(newJob);
+        }
+        empList.push_front(newEmp);
+    }
+
+}
+
+
+
+void new_readCanFromFile(fstream& file,list<Candidate>& canList){
+    int size=0,jobSize=0,canInJobSize=0;
+    string str;
+    int integer;
+    bool boolian;
+
+    file>>size;
+    for(int i = 0;i<size;++i){
+        Candidate newCan;
+        file>>str;
+        newCan.setName(str);
+        file>>str;
+        newCan.setLastName(str);
+        file>>str;
+        newCan.setId(str);
+        file>>str;
+        newCan.setPassword(str);
+        file>>str;
+        newCan.setEmail(str);
+        getline(file,str);
+        getline(file,str);
+        newCan.setStory(str);
+        file>>integer;
+        newCan.setAge(integer);
+        getline(file,str);
+        getline(file,str);
+        newCan.setResume(str);
+        file>>jobSize;
+        for(int j = 0;j<jobSize;++j){
+            Jobs newJob;
+
+            file>>str;
+            newJob.setArea(str);
+            file>>str;
+            newJob.setJobType(str);
+            file>>boolian;
+            newJob.setSaturday(boolian);
+            getline(file,str);
+            getline(file,str);
+            newJob.setProfession(str);
+            file>>integer;
+            newJob.setExperience(integer);
+            file>>str;
+            newJob.setEmpId(str);
+            file>>canInJobSize;
+            for(int z=0;z<canInJobSize;++z){
+                file>>str;
+                newJob.canIdInJob.push_front(str);
+            }
+            newCan.canJobs.push_front(newJob);
+        }
+        canList.push_front(newCan);
+    }
+
+}
+
 
 
 void deleteJob(Employer& emp,list<Candidate>& canList) {

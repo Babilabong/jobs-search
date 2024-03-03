@@ -250,6 +250,7 @@ void Employer::updateJob() {
         //available in sat?
         cout<<"please enter 0 if the job not include saturday or any key if the job include saturday"<<endl;
         cin>>choice;
+        while ((getchar()) != '\n');
         if(choice == '0')
             saturday = false;
 
@@ -291,6 +292,8 @@ void Employer::readFromFile(fstream &file) {
         Jobs newJob;
         newJob.readFromFile(file);
         jobList.push_front(newJob);
+        newJob.canIdInJob.clear();
+        newJob.~Jobs();
     }
     //return *this;
 }

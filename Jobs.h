@@ -26,6 +26,7 @@ public:
     void setProfession(string profession){ this->profession=profession;}
     void setExperience(int exp){experience=exp;}
     void setSaturday(bool sat){saturday=sat;}
+    void setEmpId(string EmpId){ this->empId=EmpId;}
     string getArea(){return area;}
     string getJobType(){return jobType;}
     string getProfession(){return profession;}

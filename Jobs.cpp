@@ -69,7 +69,6 @@ void Jobs::readFromFile(fstream &file) {
         file>>newId;
         canIdInJob.push_front(newId);
     }
-    //return *this;
 }
 
 Jobs::Jobs(const Jobs& other) {
